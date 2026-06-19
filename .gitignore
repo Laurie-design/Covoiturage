@@ -1,0 +1,22 @@
+# Flutter
+/build/
+/android/.gradle/
+/android/app/build/
+/ios/Pods/
+/ios/.symlinks/
+/.dart_tool/
+/.packages
+.pub/
+.packages
+*.iml
+
+# IDE
+.idea/
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Misc
+*.lock
