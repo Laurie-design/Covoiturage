@@ -146,7 +146,7 @@ class _Navbar extends StatelessWidget {
             children: [
               TextButton(
                   onPressed: onPassengerTap,
-                  child: Text('Trouver un trajet',
+                  child: Text('Je suis passager',
                       style: TextStyle(
                           fontWeight: isDriverMode
                               ? FontWeight.normal

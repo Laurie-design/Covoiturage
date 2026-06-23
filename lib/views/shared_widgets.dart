@@ -60,7 +60,7 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
                             builder: (context) => const HomeView()),
                         (route) => false,
                       ),
-                  child: Text('Trouver un trajet',
+                  child: Text('Je suis passager',
                       style: TextStyle(
                           fontWeight: isDriverMode
                               ? FontWeight.normal

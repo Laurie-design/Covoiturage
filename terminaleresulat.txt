@@ -67,7 +67,7 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
                       (route) => false,
                     ),
                     child: Text(
-                      'Trouver un trajet',
+                      'Je suis passager',
                       style: TextStyle(
                         fontSize: 13,
                         fontWeight:
