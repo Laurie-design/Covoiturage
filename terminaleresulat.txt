@@ -1,339 +1,350 @@
-import 'package:flutter/material.dart';
-import '../services/auth_service.dart';
-import 'home_view.dart';
-
-class AppHeader extends StatelessWidget implements PreferredSizeWidget {
-  final bool showBack;
-  final bool isDriverMode;
-
-  const AppHeader({super.key, this.showBack = false, this.isDriverMode = true});
-
-  @override
-  Size get preferredSize => const Size.fromHeight(70);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 70,
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        border: Border(
-          bottom: BorderSide(color: Color(0xFFE2E8F0), width: 1),
-        ),
-      ),
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          showBack
-              ? IconButton(
-                  onPressed: () => Navigator.pop(context),
-                  icon: const Icon(Icons.arrow_back, color: Color(0xFF0052CC)),
-                )
-              : GestureDetector(
-                  onTap: () => Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(builder: (context) => const HomeView()),
-                    (route) => false,
-                  ),
-                  child: const Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(Icons.directions_car_filled,
-                          color: Color(0xFF0052CC), size: 24),
-                      SizedBox(width: 8),
-                      Text(
-                        'TransPorto',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF0052CC),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-          const SizedBox(width: 8),
-          Flexible(
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  TextButton(
-                    onPressed: () => Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(builder: (context) => const HomeView()),
-                      (route) => false,
-                    ),
-                    child: Text(
-                      'Je suis passager',
-                      style: TextStyle(
-                        fontSize: 13,
-                        fontWeight:
-                            isDriverMode ? FontWeight.normal : FontWeight.bold,
-                        color: isDriverMode
-                            ? Colors.black54
-                            : const Color(0xFF0052CC),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  TextButton(
-                    onPressed: () => Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              HomeView(initialDriverMode: true)),
-                      (route) => false,
-                    ),
-                    child: Text(
-                      'Je suis chauffeur',
-                      style: TextStyle(
-                        fontSize: 13,
-                        fontWeight:
-                            isDriverMode ? FontWeight.bold : FontWeight.normal,
-                        color: isDriverMode
-                            ? const Color(0xFF0052CC)
-                            : Colors.black87,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  ElevatedButton.icon(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF0052CC),
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 14, vertical: 12),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30)),
-                      elevation: 0,
-                    ),
-                    onPressed: () => Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              const HomeView(initialDriverMode: true)),
-                      (route) => false,
-                    ),
-                    icon: const Icon(Icons.add, size: 16),
-                    label: const Text('Publier',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 13)),
-                  ),
-                  const SizedBox(width: 12),
-                  Center(
-                    child: Container(
-                      width: 36,
-                      height: 36,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: const Color(0xFFF1F5F9),
-                        border: Border.all(
-                            color: const Color(0xFFE2E8F0), width: 1),
-                      ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(18),
-                        child: AuthService().profileImage != null
-                            ? Image.memory(AuthService().profileImage!,
-                                fit: BoxFit.cover)
-                            : const Icon(Icons.person_outline,
-                                color: Color(0xFF64748B), size: 18),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class AppFooter extends StatelessWidget {
-  const AppFooter({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      color: const Color(0xFFF8FAFC),
-      padding: const EdgeInsets.symmetric(vertical: 64.0, horizontal: 64.0),
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'TransPorto',
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFF0F172A)),
-                  ),
-                  const SizedBox(height: 16),
-                  TextButton(
-                    onPressed: () => Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(builder: (context) => const HomeView()),
-                      (route) => false,
-                    ),
-                    child: const Text('Accueil',
-                        style: TextStyle(color: Color(0xFF0052CC))),
-                  ),
-                ],
-              ),
-              _FooterColumn(
-                title: 'Légal',
-                links: [
-                  'Conditions Générales',
-                  'Protection des données',
-                  'Mentions légales'
-                ],
-              ),
-              _FooterColumn(
-                title: 'Aide',
-                links: [
-                  'Comment ça marche ?',
-                  "Centre d'aide",
-                  'Nous contacter'
-                ],
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Application',
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFF0F172A)),
-                  ),
-                  const SizedBox(height: 16),
-                  _AppDownloadButton(
-                      icon: Icons.play_arrow,
-                      storeName: 'Google Play',
-                      platform: 'Android App'),
-                  const SizedBox(height: 12),
-                  _AppDownloadButton(
-                      icon: Icons.apple,
-                      storeName: 'App Store',
-                      platform: 'iOS App'),
-                ],
-              ),
-            ],
-          ),
-          const SizedBox(height: 48),
-          const Divider(color: Color(0xFFE2E8F0)),
-          const SizedBox(height: 24),
-          const Text(
-            '© 2026 TransPorto. Tous droits réservés.',
-            style: TextStyle(color: Color(0xFF94A3B8)),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _FooterColumn extends StatelessWidget {
-  final String title;
-  final List<String> links;
-
-  const _FooterColumn({required this.title, required this.links});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          title,
-          style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: Color(0xFF0F172A)),
-        ),
-        const SizedBox(height: 16),
-        ...links.map((link) => Padding(
-              padding: const EdgeInsets.only(bottom: 8),
-              child: TextButton(
-                onPressed: () {},
-                child: Text(link,
-                    style: const TextStyle(color: Color(0xFF475569))),
-              ),
-            )),
-      ],
-    );
-  }
-}
-
-class _AppDownloadButton extends StatelessWidget {
-  final IconData icon;
-  final String storeName;
-  final String platform;
-
-  const _AppDownloadButton(
-      {required this.icon, required this.storeName, required this.platform});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-      decoration: BoxDecoration(
-        border: Border.all(color: const Color(0xFFE2E8F0)),
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Row(
-        children: [
-          Icon(icon, size: 20, color: const Color(0xFF0F172A)),
-          const SizedBox(width: 8),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(storeName,
-                  style:
-                      const TextStyle(fontSize: 10, color: Color(0xFF64748B))),
-              Text(platform,
-                  style: const TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 13,
-                      color: Color(0xFF0F172A))),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class ProfileAvatar extends StatelessWidget {
-  final double radius;
-
-  const ProfileAvatar({super.key, this.radius = 16});
-
-  @override
-  Widget build(BuildContext context) {
-    final auth = AuthService();
-    return CircleAvatar(
-      radius: radius,
-      backgroundColor: const Color(0xFFEEF2F6),
-      child: ClipOval(
-        child: auth.profileImage != null
-            ? Image.memory(auth.profileImage!,
-                width: radius * 2,
-                height: radius * 2,
-                fit: BoxFit.cover)
-            : Icon(Icons.person_outline,
-                size: radius * 0.9, color: const Color(0xFF000066)),
-      ),
-    );
-  }
-}
+Ah d'accord ! Voici tous les écrans que l'admin verra dans l'app Flutter, avec leur contenu visuel détaillé :
+ÉCRAN 1 — Connexion Admin
+┌─────────────────────────────┐
+│    TRANSPORTO ADMIN         │
+│                             │
+│    [Logo]                   │
+│                             │
+│    Email                    │
+│    [________________]       │
+│                             │
+│    Mot de passe             │
+│    [________________]       │
+│                             │
+│    [Se connecter]           │
+│                             │
+│    Mot de passe oublié ?    │
+└─────────────────────────────┘
+Design simple, fond bleu foncé #0F172A, carte blanche centrée.
+ÉCRAN 2 — Dashboard Principal
+┌──────────────────────────────────────────────────┐
+│  ☰ TransPorto Admin          🔔  👤 Admin       │
+├──────────────────────────────────────────────────┤
+│                                                    │
+│  [👥 1240    +12%]  [🚗 342    +8%]               │
+│  Utilisateurs          Trajets                    │
+│                                                     │
+│  [💰 4,5M    +23%]  [📋 14     ⚠️]               │
+│  Revenus total        Docs en attente             │
+│                                                     │
+│  ┌────────────────────┐  ┌────────────────────┐   │
+│  │  INSCRIPTIONS (30j)│  │  TRAJETS (30j)     │   │
+│  │  ╱╲   ╱╲           │  │      ╱╲            │   │
+│  │ ╱  ╲_╱  ╲_         │  │  ╱╲╱  ╲_          │   │
+│  │╱              ╲    │  │ ╱         ╲_       │   │
+│  │      LINE CHART     │  │    DONUT CHART     │   │
+│  └────────────────────┘  └────────────────────┘   │
+│                                                     │
+│  ┌─ Activité récente ─────────────────────────┐   │
+│  │  • Koffi A. a soumis sa CNI    il y a 2min │   │
+│  │  • Trajet Lomé→Kara créé      il y a 15min │   │
+│  │  • Paiement 12 000 FCFA       il y a 1h    │   │
+│  │  • Nouveau compte: Ama D.     il y a 2h    │   │
+│  │  • Permis de Yovo K. validé   il y a 3h    │   │
+│  └─────────────────────────────────────────────┘   │
+│                                                     │
+│  ┌─ Documents en attente ──────────────────────┐   │
+│  │  • Koffi A. → CNI          [ Voir ]         │   │
+│  │  • Yawa B. → Permis        [ Voir ]         │   │
+│  │  • Komlan S. → Carte grise  [ Voir ]         │   │
+│  │  • Afi T. → Assurance       [ Voir ]         │   │
+│  └─────────────────────────────────────────────┘   │
+└──────────────────────────────────────────────────┘
+Menu latéral (drawer) :
+┌─────────────────────┐
+│ ☰ Menu              │
+│                     │
+│ 📊 Dashboard        │
+│ 👥 Utilisateurs     │
+│ 📋 Documents        │
+│ 🚗 Trajets          │
+│ 💰 Paiements        │
+│ 📈 Statistiques     │
+│ 📄 Rapports         │
+│ ⚙️ Paramètres       │
+│                     │
+│ 🚪 Déconnexion      │
+└─────────────────────┘
+ÉCRAN 3 — Liste des utilisateurs
+┌──────────────────────────────────────────────────────┐
+│  ☰ 👥 Utilisateurs                                   │
+│                                                       │
+│  [🔍 Rechercher un utilisateur...]   [Filtres ▼]      │
+│                                                       │
+│  Rôle: [Tous ▼]  Statut: [Tous ▼]                    │
+│                                                       │
+│  ┌──────────────────────────────────────────────┐    │
+│  │ Nom       │ Tél        │ Rôle   │ Doc  │ Date │    │
+│  ├──────────────────────────────────────────────┤    │
+│  │ Koffi A. │ 90 00 00 01│ 🚗    │ ✅   │ 20/06│    │
+│  │ Yawa B.  │ 90 00 00 02│ 👤    │ ⏳   │ 21/06│    │
+│  │ Komlan S.│ 90 00 00 03│ 🚗    │ ❌   │ 19/06│    │
+│  │ Afi T.   │ 90 00 00 04│ 👤    │ ✅   │ 22/06│    │
+│  │ ...      │ ...        │ ...   │ ...  │ ...  │    │
+│  └──────────────────────────────────────────────┘    │
+│                                                       │
+│  [< 1 2 3 4 5 ... 42 >]   [Exporter CSV ▼]          │
+└──────────────────────────────────────────────────────┘
+En cliquant sur un utilisateur :
+┌──────────────────────────────────────────────────────┐
+│  ← Retour  |  Profil de Koffi A.                    │
+│                                                       │
+│  [Photo]  Koffi A.                                    │
+│           koffi.a@email.com  |  +228 90 00 00 01      │
+│           Membre depuis: 10/06/2026                    │
+│           Rôle: 🚗 Conducteur                          │
+│           Statut: ✅ Compte actif                      │
+│                                                       │
+│  ┌─ Documents ──────────────────────────────────┐    │
+│  │ Type         │ Statut   │ Date    │ Action   │    │
+│  │ ──────────── │ ─────── │ ─────── │ ──────── │    │
+│  │ CNI          │ ✅ Validé│ 15/06   │ Voir     │    │
+│  │ Permis       │ ⏳ En att│ 18/06   │ Traiter  │    │
+│  │ Carte grise  │ ❌ Refusé│ 19/06   │ Voir     │    │
+│  │ Assurance    │ ⏳ En att│ 21/06   │ Traiter  │    │
+│  │ Visite tech. │ —        │ —       │ —        │    │
+│  │ TVM          │ —        │ —       │ —        │    │
+│  └────────────────────────────────────────────────┘    │
+│                                                       │
+│  ┌─ Trajets effectués ───────────────────────────┐    │
+│  │ Lomé → Kara     12/06   4 pass.    ✅ Terminé │    │
+│  │ Lomé → Atakpamé  15/06   3 pass.    ✅ Terminé │    │
+│  │ Lomé → Kpalimé   18/06   0 pass.    ❌ Annulé │    │
+│  └────────────────────────────────────────────────┘    │
+│                                                       │
+│  [Suspendre le compte]  [Contacter]                   │
+└──────────────────────────────────────────────────────┘
+ÉCRAN 4 — Revue des documents (le plus important)
+Liste des documents en attente
+┌──────────────────────────────────────────────────────┐
+│  ☰ 📋 Documents à vérifier                           │
+│                                                       │
+│  Filtres: Type: [Tous ▼]  Statut: [En attente ▼]     │
+│                                                       │
+│  ┌──────────────────────────────────────────────┐    │
+│  │ Utilisateur  │ Type      │ Soumis le │ Action │    │
+│  ├──────────────────────────────────────────────┤    │
+│  │ Koffi A.     │ 📄 CNI    │ 22/06 14:30│ Voir  │    │
+│  │ Yawa B.      │ 📄 Permis │ 22/06 13:15│ Voir  │    │
+│  │ Komlan S.    │ 📄 C.gr.  │ 22/06 11:00│ Voir  │    │
+│  │ Afi T.       │ 📄 Assur. │ 21/06 16:45│ Voir  │    │
+│  │ ...          │ ...       │ ...        │ ...   │    │
+│  └──────────────────────────────────────────────┘    │
+│                                                       │
+│  □ Tout sélectionner  [Approuver]  [Rejeter]         │
+│  [< 1 2 3 >]                                         │
+└──────────────────────────────────────────────────────┘
+Écran de revue détaillée d'un document
+┌──────────────────────────────────────────────────────┐
+│  ← Retour  |  Document: CNI - Koffi A.              │
+├──────────────────────────────────────────────────────┤
+│                                                       │
+│  ┌─ Photo du document ──────────┐  ┌─ Infos ──────┐ │
+│  │                              │  │              │ │
+│  │      ┌──────────┐          │  │ N° document: │ │
+│  │      │          │          │  │ TG-1234567   │ │
+│  │      │  PHOTO   │          │  │              │ │
+│  │      │  CNI     │          │  │ Type: CNI    │ │
+│  │      │          │          │  │              │ │
+│  │      │          │          │  │ Délivré le:  │ │
+│  │      │          │          │  │ 15/03/2020   │ │
+│  │      └──────────┘          │  │              │ │
+│  │    [Zoomer] [Plein écran]  │  │ Expire le:   │ │
+│  │                            │  │ 15/03/2030   │ │
+│  │                            │  │              │ │
+│  └────────────────────────────┘  │ Utilisateur:  │ │
+│                                   │ Koffi A.      │ │
+│  ┌─ Résultat OCR ───────────┐    │ Tél: 90 00.. │ │
+│  │ N°: TG-1234567           │    │              │ │
+│  │ Nom: KOFFI               │    │ Soumis le:   │ │
+│  │ Prénoms: Amenyo           │    │ 22/06 14:30 │ │
+│  │ Date naiss: 15/08/1995   │    │              │ │
+│  │ Expiration: 15/03/2030   │    │ Tentatives:  │ │
+│  │ ✓ Correspondances OK     │    │ 1ère soumis. │ │
+│  └──────────────────────────┘    └──────────────┘ │
+│                                                       │
+│  ┌─ Avis ─────────────────────────────────┐          │
+│  │ [✅ Toutes les informations sont       │          │
+│  │   lisibles et correspondent]           │          │
+│  │                                         │          │
+│  │ [❌ Document flou ou suspect]           │          │
+│  │    Raison : [____________________]     │          │
+│  └──────────────────────────────────────────┘        │
+│                                                       │
+│  [✅ Approuver]          [❌ Rejeter]                │
+└──────────────────────────────────────────────────────┘
+ÉCRAN 5 — Gestion des trajets
+┌──────────────────────────────────────────────────────┐
+│  ☰ 🚗 Trajets                                        │
+│                                                       │
+│  [🔍 Rechercher...]   Statut: [Tous ▼]                │
+│  Du: [__/__/____]  Au: [__/__/____]                  │
+│                                                       │
+│  ┌──────────────────────────────────────────────┐    │
+│  │ Conducteur│ Trajet    │ Date  │ Pass.│ Statut │    │
+│  ├──────────────────────────────────────────────┤    │
+│  │ Koffi A. │ Lomé→Kara │ 22/06 │ 4/4  │ ✅     │    │
+│  │ Yawa B.  │ Lomé→Aneho│ 22/06 │ 2/3  │ 🟡     │    │
+│  │ Komlan S.│ Kara→Dapaon│ 23/06 │ 1/4  │ 🔵     │    │
+│  │ ...      │ ...       │ ...   │ ...  │ ...    │    │
+│  └──────────────────────────────────────────────┘    │
+│                                                       │
+│  En cliquant sur un trajet :                         │
+│  ┌──────────────────────────────────────────────┐    │
+│  │ Trajet: Lomé → Kara                          │    │
+│  │ Conducteur: Koffi A. (⭐ 4.8)                 │    │
+│  │ Date: 22/06/2026  Départ: 06:00               │    │
+│  │ Prix: 5 000 FCFA/pass.   Places: 4/4          │    │
+│  │                                               │    │
+│  │ Passagers:                                    │    │
+│  │   • Ama D. — ✅ Payé 5 000 FCFA              │    │
+│  │   • Yao K. — ✅ Payé 5 000 FCFA              │    │
+│  │   • Afi T. — ✅ Payé 5 000 FCFA              │    │
+│  │   • Esso L. — ⏳ En attente                   │    │
+│  │                                               │    │
+│  │ [Annuler le trajet]  [Voir sur carte]         │    │
+│  └──────────────────────────────────────────────┘    │
+└──────────────────────────────────────────────────────┘
+ÉCRAN 6 — Paiements
+┌──────────────────────────────────────────────────────┐
+│  ☰ 💰 Transactions                                   │
+│                                                       │
+│  [🔍 Rechercher...]   Statut: [Tous ▼]                │
+│  Méthode: [Toutes ▼]                                 │
+│                                                       │
+│  ┌──────────────────────────────────────────────┐    │
+│  │ ID   │ User    │ Montant │ Méthode│ Date│Stat │    │
+│  ├──────────────────────────────────────────────┤    │
+│  │ 001  │ Koffi A.│ 5 000   │ T-Money│ 22/06│ ✅  │    │
+│  │ 002  │ Yawa B. │ 5 000   │ Flooz  │ 22/06│ ✅  │    │
+│  │ 003  │ Komlan S│ 10 000  │ T-Money│ 21/06│ ❌  │    │
+│  │ ...  │ ...     │ ...     │ ...    │ ...  │ ... │    │
+│  └──────────────────────────────────────────────┘    │
+│                                                       │
+│  Total: 4 520 000 FCFA     [Exporter CSV]            │
+│                                                       │
+│  En cliquant :                                        │
+│  ┌──────────────────────────────────────────────┐    │
+│  │ Transaction #001                             │    │
+│  │ Montant: 5 000 FCFA                         │    │
+│  │ Méthode: T-Money (Togo)                     │    │
+│  │ Payeur: Ama D. → Conducteur: Koffi A.        │    │
+│  │ Trajet: Lomé → Kara                         │    │
+│  │ Statut: ✅ Réussi                            │    │
+│  │ Date: 22/06/2026 06:05                      │    │
+│  │                                              │    │
+│  │ [Rembourser]                                  │    │
+│  └──────────────────────────────────────────────┘    │
+└──────────────────────────────────────────────────────┘
+ÉCRAN 7 — Statistiques
+┌──────────────────────────────────────────────────────┐
+│  ☰ 📈 Statistiques                                   │
+│                                                       │
+│  Période: [7 jours ▼]  [30 jours ▼]  [12 mois ▼]     │
+│                                                       │
+│  ┌─── Inscriptions ───────────────────────────┐      │
+│  │  ╱╲          ╱╲                            │      │
+│  │ ╱  ╲  ╱╲    ╱  ╲              +15%       │      │
+│  │╱    ╲╱  ╲  ╱    ╲__          ce mois-ci   │      │
+│  │           ╲╱                               │      │
+│  │    LINE CHART - Inscriptions par jour       │      │
+│  └───────────────────────────────────────────┘       │
+│                                                       │
+│  ┌─── Trajets mensuels ──────────────────────┐      │
+│  │  ████████ 48  Jan                         │      │
+│  │  ██████████████ 72  Fév                   │      │
+│  │  ████████████████████ 105  Mar            │      │
+│  │  █████████████████████████ 130  Avr       │      │
+│  │  ████████████████████████████ 145  Mai    │      │
+│  │  █████████████████████████████████ 165  Ju│      │
+│  │           BAR CHART horizontal             │      │
+│  └───────────────────────────────────────────┘       │
+│                                                       │
+│  ┌─── Répartition ──────────┐ ┌─── Documents ────┐  │
+│  │                          │ │                   │  │
+│  │    🚗 45%  👤 55%       │ │ CNI  ✅✅✅⏳     │  │
+│  │                          │ │ Permis✅✅⏳⏳    │  │
+│  │  Conducteurs/Passagers   │ │ C.G. ✅⏳⏳❌    │  │
+│  │       DONUT CHART        │ │ Assur.✅✅✅⏳    │  │
+│  └──────────────────────────┘ └───────────────────┘  │
+│                                                       │
+│  ┌─── Top 5 routes ──────────────────────────┐      │
+│  │ 🥇 Lomé → Kara          85 trajets        │      │
+│  │ 🥈 Lomé → Atakpamé      62 trajets        │      │
+│  │ 🥉 Lomé → Kpalimé       48 trajets        │      │
+│  │ 4.  Kara → Dapaong      31 trajets        │      │
+│  │ 5.  Lomé → Aneho        27 trajets        │      │
+│  └───────────────────────────────────────────┘       │
+└──────────────────────────────────────────────────────┘
+ÉCRAN 8 — Rapports
+┌──────────────────────────────────────────────────────┐
+│  ☰ 📄 Rapports                                       │
+│                                                       │
+│  ┌──────────────────────────────────────────────┐    │
+│  │ 📄 Rapport journalier            22/06/2026   │    │
+│  │   Inscriptions: 12 | Trajets: 8 | Revenu: 45│    │
+│  │   0 000 FCFA | Docs validés: 15             │    │
+│  │                                    [PDF] [CSV]│    │
+│  ├──────────────────────────────────────────────┤    │
+│  │ 📄 Rapport mensuel              Juin 2026     │    │
+│  │   Inscriptions: 245 | Trajets: 165           │    │
+│  │   Revenu: 4 520 000 FCFA                     │    │
+│  │   Taux conversion: 38%                       │    │
+│  │                                    [PDF] [CSV]│    │
+│  ├──────────────────────────────────────────────┤    │
+│  │ 📄 Rapport vérifications        22/06/2026   │    │
+│  │   15 approuvés | 3 refusés                   │    │
+│  │                                    [CSV]     │    │
+│  ├──────────────────────────────────────────────┤    │
+│  │ 📄 Rapport financier            Juin 2026     │    │
+│  │   Transactions: 342 | Remboursements: 3     │    │
+│  │                                    [PDF] [CSV]│    │
+│  └──────────────────────────────────────────────┘    │
+│                                                       │
+│  Générer un rapport :                                │
+│  Type: [Journalier ▼]  Date: [__/__/____]            │
+│  [Générer]                                            │
+└──────────────────────────────────────────────────────┘
+ÉCRAN 9 — Paramètres
+┌──────────────────────────────────────────────────────┐
+│  ☰ ⚙️ Paramètres                                     │
+│                                                       │
+│  ┌─ Informations admin ────────────────────────┐    │
+│  │ Nom: Admin TransPorto                       │    │
+│  │ Email: admin@transporto.tg                   │    │
+│  │ [Modifier]                                   │    │
+│  └──────────────────────────────────────────────┘    │
+│                                                       │
+│  ┌─ Notifications ────────────────────────────┐      │
+│  │ ✅ Nouveau document soumis                 │      │
+│  │ ✅ Nouvel utilisateur inscrit              │      │
+│  │ ✅ Paiement échoué                         │      │
+│  │ ☐ Rapport hebdomadaire automatique         │      │
+│  └──────────────────────────────────────────────┘    │
+│                                                       │
+│  ┌─ Plateforme ──────────────────────────────┐      │
+│  │ Commission conducteur: [10] %              │      │
+│  │ Prix minimum trajet: [1 000] FCFA          │      │
+│  │ Nombre max passagers: [4]                  │      │
+│  │ [Enregistrer]                               │      │
+│  └──────────────────────────────────────────────┘    │
+│                                                       │
+│  ┌─ Gestion admins ─────────────────────────┐        │
+│  │ Admin 1: superadmin@transporto.tg        │        │
+│  │ Admin 2: modérateur@transporto.tg        │        │
+│  │ [Ajouter un admin]                       │        │
+│  └──────────────────────────────────────────┘        │
+└──────────────────────────────────────────────────────┘
+RÉSUMÉ VISUEL — Les 9 écrans
+#	Écran	Ce que l'admin voit
+1	Connexion	Email + mot de passe, fond bleu foncé
+2	Dashboard	4 stats (users/trajets/revenus/docs) + line chart + donut + timeline activité + docs en attente
+3	Utilisateurs	Tableau avec recherche/filtres + clic → profil détail avec documents et historique
+4	Documents	Liste des soumissions + écran revue avec photo + OCR + boutons Approuver/Rejeter
+5	Trajets	Tableau + détail trajet avec passagers, paiements, bouton annulation
+6	Paiements	Liste transactions + détail + remboursement + export
+7	Statistiques	Line chart inscriptions, bar chart trajets, donut répartition, top routes
+8	Rapports	Liste rapports générés + générateur (type + date) + PDF/CSV
+9	Paramètres	Profil admin, notifications, configuration plateforme, gestion admins
+Voilà, ça c'est tout ce que l'admin verra — rien que le frontend, écran par écran. Demain on code tout ça 😎
+On vérifie aussi l'dentité de comme pour le pasager et conducteur, aussi la connexion avec numéro de téléphone et mot de passe au lieu de email, et on lui envoie l'OTP pour confirmer le numéro, je ne veux pas qu'on l'envoie l'otp à chaque connexion, essai de voir ça, je ne sais comment faire

@@ -77,7 +77,7 @@ class _PublishTripViewState extends State<PublishTripView> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: const [
                             Text(
-                              'Publier un trajet',
+                              'Proposer un trajet',
                               style: TextStyle(
                                   fontSize: 22,
                                   fontWeight: FontWeight.bold,

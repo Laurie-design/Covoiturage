@@ -88,7 +88,7 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
             ],
           ),
 
-          // ZONE DROITE : bouton publier + avatar, identique à _Navbar
+          // ZONE DROITE : bouton Proposer + avatar, identique à _Navbar
           Row(
             children: [
               ElevatedButton.icon(
@@ -108,7 +108,7 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
                   (route) => false,
                 ),
                 icon: const Icon(Icons.add, size: 18),
-                label: const Text('Publier un trajet',
+                label: const Text('Proposer un trajet',
                     style: TextStyle(fontWeight: FontWeight.bold)),
               ),
               const SizedBox(width: 16),

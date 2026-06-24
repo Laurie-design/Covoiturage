@@ -18,7 +18,7 @@ class OnboardingView extends StatelessWidget {
         : 'Finaliser votre profil\nPassager';
 
     final String description = isDriver
-        ? 'Pour pouvoir publier des trajets inter-villes sur TransPorto, nous devons vérifier votre identité et vos documents de transport. Cela ne prend que 2 minutes.'
+        ? 'Pour pouvoir Proposer des trajets inter-villes sur TransPorto, nous devons vérifier votre identité et vos documents de transport. Cela ne prend que 2 minutes.'
         : 'Pour garantir la sécurité de la communauté sur TransPorto, nous devons simplement vérifier votre pièce d\'identité avant votre premier voyage. Cela ne prend que 2 minutes.';
 
     return Scaffold(

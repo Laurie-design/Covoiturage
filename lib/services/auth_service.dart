@@ -7,6 +7,7 @@ class AuthService extends ChangeNotifier {
 
   bool _isLoggedIn = false;
   bool _isDriver = false;
+  bool _isAdmin = false;
   bool _identityVerified = false;
   bool _licenseVerified = false;
   bool _vehicleVerified = false;
@@ -19,6 +20,7 @@ class AuthService extends ChangeNotifier {
 
   bool get isLoggedIn => _isLoggedIn;
   bool get isDriver => _isDriver;
+  bool get isAdmin => _isAdmin;
   bool get isFullyVerified =>
       _identityVerified && _licenseVerified && _vehicleVerified;
   bool get identityVerified => _identityVerified;
@@ -33,6 +35,7 @@ class AuthService extends ChangeNotifier {
 
   void login({
     bool isDriver = false,
+    bool isAdmin = false,
     String firstName = '',
     String lastName = '',
     String phone = '',
@@ -40,6 +43,7 @@ class AuthService extends ChangeNotifier {
   }) {
     _isLoggedIn = true;
     _isDriver = isDriver;
+    _isAdmin = isAdmin;
     _firstName = firstName;
     _lastName = lastName;
     _phone = phone;
@@ -68,6 +72,7 @@ class AuthService extends ChangeNotifier {
   void logout() {
     _isLoggedIn = false;
     _isDriver = false;
+    _isAdmin = false;
     _identityVerified = false;
     _licenseVerified = false;
     _vehicleVerified = false;

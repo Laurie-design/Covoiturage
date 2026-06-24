@@ -7,6 +7,8 @@ import 'driver_dashboard_view.dart';
 import 'shared_widgets.dart';
 import '../services/auth_service.dart';
 import '../utils/trip_guard.dart';
+import 'admin/admin_login_view.dart';
+import 'admin/admin_dashboard_view.dart';
 
 class HomeView extends StatefulWidget {
   final bool initialDriverMode;
@@ -127,20 +129,8 @@ class _Navbar extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          // Logo
-          const Row(
-            children: [
-              Icon(Icons.directions_car, color: Color(0xFF0052CC), size: 32),
-              SizedBox(width: 8),
-              Text(
-                'TransPorto',
-                style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF0052CC)),
-              ),
-            ],
-          ),
+          // Logo (tap 5× pour admin)
+          _AdminSecretLogo(),
           // Liens du milieu
           Row(
             children: [
@@ -167,7 +157,7 @@ class _Navbar extends StatelessWidget {
                               : Colors.black87))),
             ],
           ),
-          // Bouton Publier & Profil
+          // Bouton Proposer & Profil
           Row(
             children: [
               ElevatedButton.icon(
@@ -181,7 +171,7 @@ class _Navbar extends StatelessWidget {
                 ),
                 onPressed: () => TripGuard.checkAuthAndNavigate(context),
                 icon: const Icon(Icons.add, size: 18),
-                label: const Text('Publier un trajet',
+                label: const Text('Proposer un trajet',
                     style: TextStyle(fontWeight: FontWeight.bold)),
               ),
               const SizedBox(width: 16),
@@ -201,16 +191,28 @@ class _Navbar extends StatelessWidget {
                       context,
                       MaterialPageRoute(builder: (_) => const SignInView()),
                     );
-                  } else if (value == 'dashboard') {
-                    final a = AuthService();
+                  } else if (value == 'admin') {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
-                        builder: (_) => a.isDriver
-                            ? const DriverDashboardView()
-                            : const PassengerDashboardView(),
-                      ),
+                      MaterialPageRoute(builder: (_) => const AdminLoginView()),
                     );
+                  } else if (value == 'dashboard') {
+                    final a = AuthService();
+                    if (a.isAdmin) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => const AdminDashboardView()),
+                      );
+                    } else {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => a.isDriver
+                              ? const DriverDashboardView()
+                              : const PassengerDashboardView(),
+                        ),
+                      );
+                    }
                   } else if (value == 'logout') {
                     AuthService().logout();
                     Navigator.pushAndRemoveUntil(
@@ -256,9 +258,11 @@ class _Navbar extends StatelessWidget {
                           const Icon(Icons.dashboard_outlined,
                               color: Color(0xFF0052CC), size: 20),
                           const SizedBox(width: 12),
-                          Text(auth.isDriver
+                          Text(auth.isAdmin
                               ? 'Mon tableau de bord'
-                              : 'Mes réservations'),
+                              : auth.isDriver
+                                  ? 'Mon tableau de bord'
+                                  : 'Mes réservations'),
                         ],
                       ),
                     ),
@@ -572,7 +576,7 @@ class _GainsCalculatorCardState extends State<_GainsCalculatorCard> {
               onPressed: () => TripGuard.checkAuthAndNavigate(context),
               icon: const Icon(Icons.add, size: 20),
               label: const Text(
-                'Publier un trajet',
+                'Proposer un trajet',
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
               ),
             ),
@@ -1644,12 +1648,56 @@ class _AppDownloadButton extends StatelessWidget {
               Text(platform,
                   style: const TextStyle(color: Colors.grey, fontSize: 10)),
               Text(storeName,
-                  style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold)),
-            ],
-          )
+                   style: const TextStyle(
+                       color: Colors.white,
+                       fontSize: 14,
+                       fontWeight: FontWeight.bold)),
+             ],
+           )
+         ],
+       ),
+     );
+   }
+ }
+
+// Widget secret : tap 5× sur le logo pour accéder à l'admin
+class _AdminSecretLogo extends StatefulWidget {
+  @override
+  State<_AdminSecretLogo> createState() => _AdminSecretLogoState();
+}
+
+class _AdminSecretLogoState extends State<_AdminSecretLogo> {
+  int _tapCount = 0;
+
+  void _onTap() {
+    _tapCount++;
+    if (_tapCount >= 5) {
+      _tapCount = 0;
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => const AdminLoginView()),
+      );
+    }
+    Future.delayed(const Duration(seconds: 3), () {
+      if (mounted) _tapCount = 0;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: _onTap,
+      child: const Row(
+        children: [
+          Icon(Icons.directions_car, color: Color(0xFF0052CC), size: 32),
+          SizedBox(width: 8),
+          Text(
+            'TransPorto',
+            style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF0052CC)),
+          ),
         ],
       ),
     );
